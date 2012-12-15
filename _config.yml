@@ -7,7 +7,7 @@ title: Gavin
 subtitle: c'est la vie......
 author: gavingeng
 simple_search: http://google.com/search
-description:
+description: 一个还有些想法的人，而不是行尸走肉......
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -89,7 +89,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: gavingeng.disqus.com
 disqus_show_comment_count: true
 
 # Google Analytics
