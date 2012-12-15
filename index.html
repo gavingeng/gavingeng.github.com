@@ -9,8 +9,9 @@
   <meta name="author" content="gavingeng">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="1. 准备工作 nginx各版本下载链接页面 wget http://nginx.org/download/nginx-1.2.6.tar.gz 下载pcre
+选取合适的版本下载，并解压
+下载nginx-gridfs以及mongo-c-driver https://github.com/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +72,134 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/12/15/nginx-gridfs/">Mac安装nginx及mongo-gridfs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-15T19:08:00+08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>1.  准备工作</h3>
+
+<p><a href="http://nginx.org/en/download.html" title="nginx download">nginx各版本下载链接页面</a></p>
+
+<pre><code>wget http://nginx.org/download/nginx-1.2.6.tar.gz  
+</code></pre>
+
+<p><a href="ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre">下载pcre</a><br/>
+选取合适的版本下载，并解压<br/>
+下载nginx-gridfs以及mongo-c-driver</p>
+
+<pre><code>https://github.com/mdirolf/nginx-gridfs  
+</code></pre>
+
+<p>建议采取git clone的方式来下载</p>
+
+<pre><code>git clone https://github.com/mdirolf/nginx-gridfs.git  
+cd nginx-gridfs  
+git clone https://github.com/mongodb/mongo-c-driver.git  
+</code></pre>
+
+<h3>2.  解压pcre</h3>
+
+<pre><code>tar -zxvf pcre-8.21.tar.gz  
+ln -s pcre-8.21 pare  
+</code></pre>
+
+<h4>注:</h4>
+
+<p>采用brew install pcre时，会发生在编译nginx时无法找到pcre，顾采用源码方式<br/>
+另外，openssl等可以通过brew来安装</p>
+
+<h3>3.  安装nginx</h3>
+
+<pre><code>tar -zxvf nginx-1.2.6.tar.gz
+cd nginx-1.2.6/
+./configure --prefix=/usr/local/lib/nginx --with-pcre=/Users/gavingeng/programs/pcre --with-http_ssl_module --add-module=/Users/gavingeng/projects/github/nginx-gridfs
+sudo make
+sudo make install
+</code></pre>
+
+<p>nginx的安装中，配置好pcre以及nginx-gridfs的模块路径即可.</p>
+
+<h3>4. mongodb的安装请自行搜索</h3>
+
+<p>略&#8230;&#8230;</p>
+
+<h3>5. 配置nginx-gridfs</h3>
+
+<pre><code>    location /pics/ {
+        gridfs pics
+        field=filename
+        type=string;
+        mongo 127.0.0.1:27017;
+    }  
+</code></pre>
+
+<h4>参数释义</h4>
+
+<p>gridfs：nginx识别插件的关键字<br/>
+pics：db名<br/>
+[field]：查询字段，保证mongdb里有这个字段名，支持<em>id, filename, 可省略, 默认是</em>id<br/>
+[type]：解释field的数据类型，支持objectid, int, string, 可省略, 默认是int<br/>
+[user]：用户名, 可省略<br/>
+[pass]：密码, 可省略<br/>
+mongo：mongodb url</p>
+
+<h4><a href="https://github.com/mdirolf/nginx-gridfs">参考</a>    https://github.com/mdirolf/nginx-gridfs</h4>
+
+<h3>6. 上传图片</h3>
+
+<pre><code>$MONGO_HOME/bin/mongofiles  --host 127.0.0.1 --port 27017 --db pics --local  $HOME/Pictures/firefox-os_b2g.png put firefox-os_b2g.png  --type png  
+$MONGO_HOME/bin/mongofiles  --host 127.0.0.1 --port 27017 --db pics --local  $HOME/Pictures/iphone_diushi.jpg put iphone_diushi.jpg  --type jpg  
+</code></pre>
+
+<p>登陆mongo查看图片</p>
+
+<pre><code>$MONGO_HOME/bin/mongo 127.0.0.1:27017/pics
+&gt;db.fs.files.find()
+{ "_id" : ObjectId("50cc4970778177bb5a959a8f"), "filename" : "firefox-os_b2g.png", "chunkSize" : 262144, "uploadDate" : ISODate("2012-12-15T09:57:04.099Z"), "md5" : "7a04fd004870e0b4c6c4c1c5b19ee076", "length" : 163386, "contentType" : "png" }
+{ "_id" : ObjectId("50cc49b3e9c8a7cc617868e9"), "filename" : "iphone_diushi.jpg", "chunkSize" : 262144, "uploadDate" : ISODate("2012-12-15T09:58:11.419Z"), "md5" : "4de83971c5ae5b733da5273f6a361593", "length" : 470604, "contentType" : "jpg" }
+</code></pre>
+
+<p>查看更多选项mongofiles &#8211;help，其他同理</p>
+
+<h3>7. 启动nginx</h3>
+
+<pre><code>sudo /usr/local/lib/nginx/sbin/nginx
+</code></pre>
+
+<p>OK,这时我们访问下我们的图片<br/>
+http://localhost/pics/firefox-os_b2g.png<br/>
+http://localhost/pics/iphone_diushi.jpg</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/12/04/new-post/">New-post</a></h1>
     
     
@@ -113,6 +242,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/15/nginx-gridfs/">mac安装nginx及mongo-gridfs</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/12/04/new-post/">new-post</a>
