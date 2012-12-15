@@ -19,7 +19,7 @@ categories: gridfs mongo nginx
     git clone https://github.com/mongodb/mongo-c-driver.git  
 ###2.  解压pcre  
     tar -zxvf pcre-8.21.tar.gz  
-    ln -s pcre-8.21 pare  
+    ln -s pcre-8.21 pcre  
 ####注:     
 采用brew install pcre时，会发生在编译nginx时无法找到pcre，顾采用源码方式  
 另外，openssl等可以通过brew来安装  
