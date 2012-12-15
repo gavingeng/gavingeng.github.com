@@ -5,6 +5,7 @@ date: 2012-12-15 19:08
 comments: true
 categories: gridfs mongo nginx
 ---
+
 ###1.  准备工作  
 [nginx各版本下载链接页面](http://nginx.org/en/download.html "nginx download")  
     wget http://nginx.org/download/nginx-1.2.6.tar.gz  
