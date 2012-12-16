@@ -3,7 +3,7 @@ layout: post
 title: "基于mongodb的GridFS文件存储"
 date: 2012-12-16 12:58
 comments: true
-categories: 
+categories: mongo 
 ---
 在mongdb中以GridFS方式来存储文件有两种方式:  
      1. 命令行方式mongofiles  
